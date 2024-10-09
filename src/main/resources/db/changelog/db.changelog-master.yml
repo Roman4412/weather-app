@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/09.10.24-create-table-users.yml
+  - include:
+      file: db/changelog/changeset/09.10.24-create-table-locations.yml
+  - include:
+      file: db/changelog/changeset/09.10.24-create-table-sessions.yml
