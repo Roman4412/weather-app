@@ -7,11 +7,12 @@
     <link rel="stylesheet" type="text/css" href="/registration.css">
 </head>
 <body>
-<form class="reg-form" method="post" action="http://localhost:8080/registration">
-    <input placeholder="login" type="text" id="login" name="login">
-    <input placeholder="password" type="text" id="password" name="password" >
+<form class="reg-form" method="post" data-th-action="@{/registration}">
+    <label for="login">Login</label>
+    <input placeholder="Enter login" type="text" name="login" id="login">
+    <label for="password">Password</label>
+    <input placeholder="Enter password" type="text" name="password" id="password">
     <button type="submit">register</button>
-
 </form>
 </body>
 </html>
