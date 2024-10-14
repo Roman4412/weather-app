@@ -14,5 +14,6 @@
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.format_sql">true</property>
         <mapping class="com.pustovalov.weatherapplication.entity.User"/>
+        <mapping class="com.pustovalov.weatherapplication.entity.Location"/>
     </session-factory>
 </hibernate-configuration>
