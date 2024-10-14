@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.pustovalov.weatherapplication.dto.WeatherApiGeoResponse;
 import com.pustovalov.weatherapplication.dto.response.WeatherData;
+import com.pustovalov.weatherapplication.entity.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
