@@ -12,7 +12,7 @@ public abstract class AbstractSessionTransactionManager {
 
     protected final SessionFactory sessionFactory;
 
-    public <R> R executeInTransaction(Function<Session, R> action) {
+    protected  <R> R executeInTransaction(Function<Session, R> action) {
         Session session = null;
         Transaction tx = null;
         R result;
