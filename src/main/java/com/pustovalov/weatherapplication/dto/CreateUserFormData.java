@@ -2,14 +2,17 @@ package com.pustovalov.weatherapplication.dto;
 
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record CreateUserFormData(
-        @NotNull(message = "The login field must be filled in")
-        @Size(min = 1 , max = 20, message = "The length of the login must be no more than 20 and no less than 1 character")
+        @NotNull(message ="{user.registration.login}")
+        @Size(min = 1 , max = 20, message = "{user.registration.login.length}")
+        @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "{user.registration.login.format}")
         String login,
-        @NotNull(message = "The password field must be filled in")
-        @Size(min = 6 , message = "The password must be at least 8 characters long")
+        @NotNull(message = "{user.registration.password}")
+        @Size(min = 8 , message = "{user.registration.password.length}")
+        @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "{user.registration.password.format}")
         String password
 ) {
 
