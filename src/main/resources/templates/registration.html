@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link rel="stylesheet" type="text/css" href="/registration.css">
+</head>
+<body>
+<form class="reg-form" method="post" th:object="${createUserFormData}" data-th-action="@{/registration}">
+    <ul th:if="${#fields.hasErrors('login')}">
+        <li th:each="err : ${#fields.errors('login')}" th:text="${err}"></li>
+    </ul>
+    <input placeholder="Enter login" type="text" th:field="*{login}">
+
+    <ul th:if="${#fields.hasErrors('password')}">
+        <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
+    </ul>
+    <p th:if="${error}" th:text="${error.message}"></p>
+    <input placeholder="Enter password" type="password" th:field="*{password}">
+    <button type="submit">register</button>
+</form>
+</body>
+</html>

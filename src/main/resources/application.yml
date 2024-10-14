@@ -4,7 +4,10 @@ spring:
     url: jdbc:${DB_DRIVER}://${DB_HOST}:${PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .html
   jpa:
     hibernate:
       ddl-auto: none
