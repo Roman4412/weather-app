@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Locations</title>
+</head>
+<body>
+<div class="search-form">
+    <form data-th-action="@{/location}" method="get">
+        <input type="search" name="cityName" th:value="${param.city}" placeholder="Enter the city name">
+        <button type="submit">find</button>
+    </form>
+</div>
+<div class="loc-save-form" th:each="location:${locations}">
+    <form data-th-action="@{/location}" method="post">
+        <p th:text="*{location.name}"></p>
+        <p th:text="*{location.country}"></p>
+        <p th:text="*{location.state}"></p>
+
+        <input type="hidden" name="name" th:value="${location.name}">
+        <input type="hidden" name="userId" value=1>
+        <input type="hidden" name="latitude" th:value="${location.lat}">
+        <input type="hidden" name="longitude" th:value="${location.lon}">
+
+        <button type="submit">save</button>
+    </form>
+</div>
+</body>
+</html>
