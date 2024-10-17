@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.postgresql.util.PSQLException;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 @Repository
 public class UserDao extends AbstractSessionTransactionManager implements IUserDao {
 
@@ -16,7 +17,7 @@ public class UserDao extends AbstractSessionTransactionManager implements IUserD
     }
 
     @Override
-    public User create(User user) {
+    public User save(User user) {
         return executeInTransaction(session -> {
             try {
                 session.persist(user);
@@ -35,11 +36,9 @@ public class UserDao extends AbstractSessionTransactionManager implements IUserD
         });
     }
 
-
-    //    public Optional<User> findById(Long id) {
-    //        Function<Session, Optional<User>> action = session -> Optional.ofNullable(session.find(User.class, id));
-    //        return inTransaction(action);
-
-    //    }
+    @Override
+    public Optional<User> findBy(long id) {
+        return Optional.ofNullable(executeInTransaction(session -> session.get(User.class, id)));
+    }
 
 }
