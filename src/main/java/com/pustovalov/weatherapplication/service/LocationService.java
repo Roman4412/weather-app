@@ -3,6 +3,8 @@ package com.pustovalov.weatherapplication.service;
 import com.pustovalov.weatherapplication.dao.ILocationDao;
 import com.pustovalov.weatherapplication.dto.LocationSaveDto;
 import com.pustovalov.weatherapplication.entity.Location;
+import com.pustovalov.weatherapplication.entity.User;
+import com.pustovalov.weatherapplication.service.mapper.LocationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,9 @@ public class LocationService {
 
     private final ILocationDao locationDao;
 
-    private final UserService userService;
+    private final LocationMapper locationMapper;
 
+    private final UserService userService;
     public List<Location> getAll(long userId) {
         if (userId <= 0) {
             throw new IllegalArgumentException("userId cannot be less than or equal to zero ");
@@ -28,12 +31,8 @@ public class LocationService {
         if (locationSaveDto == null) {
             throw new IllegalArgumentException("location cannot be null");
         }
-        Location location = new Location();
-        location.setName(locationSaveDto.name());
-        location.setUser(userService.findBy(locationSaveDto.userId()));
-        location.setLatitude(locationSaveDto.latitude());
-        location.setLongitude(locationSaveDto.longitude());
-        return locationDao.save(location);
+        User user = userService.findBy(locationSaveDto.userId());
+        return locationDao.save(locationMapper.toEntity(locationSaveDto, user));
     }
 
     public void delete(Location location) {
