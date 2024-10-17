@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    private final IUserDao IUserDao;
+    private final IUserDao userDao;
 
     private final UserMapper userMapper;
 
@@ -26,6 +26,13 @@ public class UserService {
         if (createUserFormData == null) {
             throw new IllegalArgumentException("createUserDto cannot be null");
         }
-        return IUserDao.create(userMapper.toEntity(createUserFormData));
+        return userDao.save(userMapper.toEntity(createUserFormData));
+    }
+
+    public User findBy(long id) {
+        if (0 >= id) {
+            throw new IllegalArgumentException("id cannot be less than or equal to zero ");
+        }
+        return userDao.findBy(id).orElseThrow(() -> new RuntimeException(""));
     }
 }
