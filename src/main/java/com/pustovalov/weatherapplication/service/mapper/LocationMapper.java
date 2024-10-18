@@ -11,5 +11,6 @@ import org.mapstruct.MappingConstants;
 public interface LocationMapper {
 
     @Mapping(target = "user", source = "user")
+    @Mapping(target = "id", ignore = true)
     Location toEntity(LocationSaveDto locationSaveDto, User user);
 }
