@@ -23,6 +23,18 @@ spring:
     enabled: true
     changelog: db/changelog/db.changelog-master.yml
 
-api:
-  base-url: https://api.openweathermap.org
-  key: ${OPEN_WEATHER_KEY}
+  cloud:
+    openfeign:
+      client:
+        config:
+          openWeatherClient:
+            connect-timeout: 10000
+            read-timeout: 15000
+            url: https://api.openweathermap.org
+            logger-level: basic
+            default-query-parameters:
+              limit: 15
+              appid: ${OPEN_WEATHER_KEY}
+open-weather-api:
+  geo-path: /geo/1.0/direct
+  weather-path: /data/2.5/weather

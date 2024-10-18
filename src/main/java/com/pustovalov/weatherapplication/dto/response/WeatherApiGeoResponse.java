@@ -1,4 +1,4 @@
-package com.pustovalov.weatherapplication.dto;
+package com.pustovalov.weatherapplication.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -9,7 +9,7 @@ public record WeatherApiGeoResponse(
         String lon,
         String country,
         String state
-
 ) {
+
 
 }
