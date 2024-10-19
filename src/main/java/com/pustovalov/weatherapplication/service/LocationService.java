@@ -35,10 +35,10 @@ public class LocationService {
         return locationDao.save(locationMapper.toEntity(locationSaveDto, user));
     }
 
-    public void delete(Location location) {
-        if (location == null) {
-            throw new IllegalArgumentException("location cannot be null");
+    public void delete(long id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("location's id cannot be less than or equal to zero ");
         }
-        locationDao.delete(location);
+        locationDao.delete(id);
     }
 }

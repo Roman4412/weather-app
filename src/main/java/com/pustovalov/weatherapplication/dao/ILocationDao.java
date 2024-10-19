@@ -10,5 +10,5 @@ public interface ILocationDao {
 
     List<Location> getAll(long userId);
 
-    void delete(Location location);
+    void delete(long id);
 }

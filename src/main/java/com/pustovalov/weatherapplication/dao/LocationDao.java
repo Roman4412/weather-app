@@ -46,7 +46,7 @@ public class LocationDao extends AbstractSessionTransactionManager implements IL
     }
 
     @Override
-    public void delete(Location location) {
-        sessionFactory.inTransaction(session -> session.remove(location));
+    public void delete(long id) {
+        sessionFactory.inTransaction(session -> session.remove(session.get(Location.class, id)));
     }
 }
