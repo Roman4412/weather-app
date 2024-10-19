@@ -1,4 +1,4 @@
-package com.pustovalov.weatherapplication;
+package com.pustovalov.weatherapplication.controller;
 
 import com.pustovalov.weatherapplication.dto.CreateUserFormData;
 import com.pustovalov.weatherapplication.exception.ObjectAlreadyExistException;
