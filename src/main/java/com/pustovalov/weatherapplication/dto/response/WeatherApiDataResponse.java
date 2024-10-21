@@ -1,46 +1,56 @@
 package com.pustovalov.weatherapplication.dto.response;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public record WeatherApiDataResponse(
-        Coord coord,
-        List<Weather> weather,
-        Main main,
-        Wind wind,
-        Rain rain,
-        Clouds clouds,
-        Sys sys,
-        int timezone,
-        int id,
-        String name,
-        int cod
-) {
-    public record Coord(double lon, double lat) {}
+import java.math.BigDecimal;
 
-    public record Weather(int id, String main, String description, String icon) {}
+@NoArgsConstructor
+@Getter
+@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class WeatherApiDataResponse {
 
-    public record Main(
-            double temp,
-            double feels_like,
-            double temp_min,
-            double temp_max,
-            int pressure,
-            int humidity,
-            int sea_level,
-            int grnd_level
-    ) {}
+    private Long locationId;
 
-    public record Wind(double speed, int deg, double gust) {}
+    private String LocationName;
 
-    public record Rain(double _1h) {}
+    private Coord coord;
 
-    public record Clouds(int all) {}
+    private Main main;
 
-    public record Sys(
-            int type,
-            int id,
-            String country,
-            long sunrise,
-            long sunset
-    ) {}
+    private Wind wind;
+}
+
+@NoArgsConstructor
+@Getter
+@Setter
+class Coord {
+
+    private BigDecimal lon;
+
+    private BigDecimal lat;
+}
+
+@NoArgsConstructor
+@Getter
+@Setter
+class Main {
+
+    private Integer temp;
+
+    private Integer humidity;
+
+    private Integer pressure;
+}
+
+@NoArgsConstructor
+@Getter
+@Setter
+class Wind {
+
+    private Double speed;
+
 }

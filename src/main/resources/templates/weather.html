@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather</title>
+</head>
+<body>
+<div class="search-form">
+    <form data-th-action="@{/location}" method="get">
+        <input type="search" name="cityName" placeholder="Enter the city name">
+        <button type="submit">find</button>
+    </form>
+</div>
+<div class="locations">
+    <div class="location" th:each="weather:${weatherData}">
+        <p th:text="${weather.locationName}"></p>
+        <p th:text="'Temperature: ' + ${weather.main.temp}"></p>
+        <p th:text="'Humidity: ' + ${weather.main.humidity}"></p>
+        <p th:text="'Pressure: ' + ${weather.main.pressure}"></p>
+        <p th:text="'Wind speed: ' + ${weather.wind.speed}"></p>
+        <button th:id="btn-delete- + ${weather.locationId}">delete</button>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script th:src="@{/deleteLocation.js}"></script>
