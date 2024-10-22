@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: r.pustovalov
+      changes:
+        - modifyDataType:
+            columnName: id
+            newDataType: UUID
+            tableName: sessions
+      rollback:
+        - modifyDataType:
+            tableName: sessions
+            columnName: id
+            newDataType: varchar(32)
