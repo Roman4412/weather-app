@@ -19,3 +19,10 @@ open-weather-api:
   geo-path: /geo/1.0/direct
   weather-path: /data/2.5/weather
   units: metric
+
+user-session:
+  long:
+    amount: 7
+    units: DAYS
+  cookie:
+    maxAge: 604_800

@@ -21,7 +21,11 @@
         <button th:id="btn-delete- + ${weather.locationId}">delete</button>
     </div>
 </div>
-
+<div>
+    <form data-th-action="@{/weather}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</div>
 </body>
 </html>
 

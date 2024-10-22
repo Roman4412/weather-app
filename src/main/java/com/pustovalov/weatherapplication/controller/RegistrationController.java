@@ -14,24 +14,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping
-public class UserController {
+@RequestMapping("/registration")
+public class RegistrationController {
 
     private final UserService userService;
 
-    @GetMapping("/registration")
+    @GetMapping
     public String showRegistrationPage(Model model, CreateUserFormData createUserFormData) {
         model.addAttribute("createUserFormData", createUserFormData);
         return "registration";
     }
 
-    @PostMapping("/registration")
+    @PostMapping
     public String registerUser(@Valid CreateUserFormData createUserFormData, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
         try {
-            userService.create(createUserFormData);
+            userService.save(createUserFormData);
             return "redirect:/login";
         } catch (ObjectAlreadyExistException e) {
             model.addAttribute("error", e);

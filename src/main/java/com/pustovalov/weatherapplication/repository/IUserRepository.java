@@ -9,4 +9,6 @@ public interface IUserRepository {
     User save(User user);
 
     Optional<User> findBy(Long id);
+
+    Optional<User> findBy(String login);
 }

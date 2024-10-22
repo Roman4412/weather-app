@@ -8,7 +8,7 @@ public interface ILocationRepository {
 
     Location save(Location location);
 
-    List<Location> getAll(Long userId);
+    List<Location> findAll(Long userId);
 
     void delete(Long id);
 }

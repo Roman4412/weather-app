@@ -3,8 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link rel="stylesheet" type="text/css" href="/login.css">
 </head>
 <body>
-
+<form class="login-form" method="post" data-th-action="@{/login}">
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    <input placeholder="Enter login" type="text" name="login">
+    <input placeholder="Enter password" type="password" name="password">
+    <button type="submit">Login</button>
+</form>
 </body>
 </html>

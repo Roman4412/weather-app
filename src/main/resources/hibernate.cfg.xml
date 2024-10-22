@@ -15,5 +15,6 @@
         <property name="hibernate.format_sql">true</property>
         <mapping class="com.pustovalov.weatherapplication.entity.User"/>
         <mapping class="com.pustovalov.weatherapplication.entity.Location"/>
+        <mapping class="com.pustovalov.weatherapplication.entity.Session"/>
     </session-factory>
 </hibernate-configuration>

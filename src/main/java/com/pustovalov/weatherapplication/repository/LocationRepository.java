@@ -40,9 +40,9 @@ public class LocationRepository extends AbstractSessionTransactionManager implem
     }
 
     @Override
-    public List<Location> getAll(Long userId) {
+    public List<Location> findAll(Long userId) {
         return executeInTransaction(s -> {
-            String query = "SELECT Location FROM Location WHERE Location.user.id = :userId";
+            String query = "SELECT l FROM Location l WHERE l.user.id = :userId";
             return s.createQuery(query, Location.class)
                     .setParameter("userId", userId)
                     .list();
@@ -52,8 +52,10 @@ public class LocationRepository extends AbstractSessionTransactionManager implem
     @Override
     public void delete(Long id) {
         sessionFactory.inTransaction(s -> {
-            String query = "DELETE FROM Location WHERE Location.id = :id";
-            s.createQuery(query).setParameter("id", id);
+            String query = "DELETE FROM Location l WHERE l.id = :id";
+            s.createQuery(query)
+             .setParameter("id", id)
+             .executeUpdate();
         });
     }
 }
