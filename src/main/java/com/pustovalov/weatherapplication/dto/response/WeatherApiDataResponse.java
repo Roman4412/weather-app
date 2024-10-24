@@ -15,42 +15,42 @@ public class WeatherApiDataResponse {
 
     private Long locationId;
 
-    private String LocationName;
+    private String locationName;
 
     private Coord coord;
 
     private Main main;
 
     private Wind wind;
-}
 
-@NoArgsConstructor
-@Getter
-@Setter
-class Coord {
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class Coord {
 
-    private BigDecimal lon;
+        private BigDecimal lon;
 
-    private BigDecimal lat;
-}
+        private BigDecimal lat;
+    }
 
-@NoArgsConstructor
-@Getter
-@Setter
-class Main {
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class Main {
 
-    private Integer temp;
+        private Integer temp;
 
-    private Integer humidity;
+        private Integer humidity;
 
-    private Integer pressure;
-}
+        private Integer pressure;
+    }
 
-@NoArgsConstructor
-@Getter
-@Setter
-class Wind {
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class Wind {
 
-    private Double speed;
+        private Double speed;
 
+    }
 }

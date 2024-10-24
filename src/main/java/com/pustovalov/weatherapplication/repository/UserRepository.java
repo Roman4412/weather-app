@@ -1,4 +1,4 @@
-package com.pustovalov.weatherapplication.dao;
+package com.pustovalov.weatherapplication.repository;
 
 import com.pustovalov.weatherapplication.entity.User;
 import com.pustovalov.weatherapplication.exception.ObjectAlreadyExistException;
@@ -8,19 +8,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 @Repository
-public class UserDao extends AbstractSessionTransactionManager implements IUserDao {
+public class UserRepository extends AbstractSessionTransactionManager implements IUserRepository {
 
     private static final String UNIQUE_VIOLATION_CODE = "23505";
 
-    public UserDao(SessionFactory sessionFactory) {
+    public UserRepository(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 
     @Override
     public User save(User user) {
-        return executeInTransaction(session -> {
+        return executeInTransaction(s -> {
             try {
-                session.persist(user);
+                s.persist(user);
             } catch (Exception e) {
                 Throwable cause = e.getCause();
                 if (cause instanceof PSQLException psqlException) {
@@ -37,8 +37,8 @@ public class UserDao extends AbstractSessionTransactionManager implements IUserD
     }
 
     @Override
-    public Optional<User> findBy(long id) {
-        return Optional.ofNullable(executeInTransaction(session -> session.get(User.class, id)));
+    public Optional<User> findBy(Long id) {
+        return Optional.ofNullable(executeInTransaction(s -> s.get(User.class, id)));
     }
 
 }

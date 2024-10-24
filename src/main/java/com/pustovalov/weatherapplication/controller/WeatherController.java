@@ -13,25 +13,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @RequiredArgsConstructor
-
 @Controller
 @RequestMapping("/weather")
 public class WeatherController {
 
-    private static final int USER_ID = 1;
+    private static final Long USER_ID = 1L;
 
     private final LocationService locationService;
 
     private final OpenWeatherClient openWeatherClient;
+
     @GetMapping
     public String getPage(Model model) {
         List<Location> locations = locationService.getAll(USER_ID);
-        List<WeatherApiDataResponse> allWeather = locations.stream().map(loc -> {
-            WeatherApiDataResponse weather = openWeatherClient.getWeather(loc.getLatitude(), loc.getLongitude());
-            weather.setLocationId(loc.getId());
-            weather.setLocationName(loc.getName());
-            return weather;
-        }).toList();
+        List<WeatherApiDataResponse> allWeather =
+                locations.stream()
+                         .map(l -> {
+                             WeatherApiDataResponse weather = openWeatherClient.getWeather(l.getLatitude(), l.getLongitude());
+                             weather.setLocationId(l.getId());
+                             weather.setLocationName(l.getName());
+                             return weather;
+                         })
+                         .toList();
         model.addAttribute("weatherData", allWeather);
         return "weather";
     }

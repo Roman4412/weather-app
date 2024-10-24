@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
-
 @Controller
 @RequestMapping
 public class UserController {

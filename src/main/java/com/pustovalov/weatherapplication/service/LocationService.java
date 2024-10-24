@@ -1,6 +1,6 @@
 package com.pustovalov.weatherapplication.service;
 
-import com.pustovalov.weatherapplication.dao.ILocationDao;
+import com.pustovalov.weatherapplication.repository.ILocationRepository;
 import com.pustovalov.weatherapplication.dto.LocationSaveDto;
 import com.pustovalov.weatherapplication.entity.Location;
 import com.pustovalov.weatherapplication.entity.User;
@@ -11,34 +11,32 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @RequiredArgsConstructor
-
 @Service
 public class LocationService {
 
-    private final ILocationDao locationDao;
+    private final ILocationRepository repository;
 
-    private final LocationMapper locationMapper;
+    private final LocationMapper mapper;
 
-    private final UserService userService;
-    public List<Location> getAll(long userId) {
+    public List<Location> getAll(Long userId) {
         if (userId <= 0) {
             throw new IllegalArgumentException("userId cannot be less than or equal to zero ");
         }
-        return locationDao.getAll(userId);
+        return repository.getAll(userId);
     }
 
     public Location save(LocationSaveDto locationSaveDto) {
         if (locationSaveDto == null) {
             throw new IllegalArgumentException("location cannot be null");
         }
-        User user = userService.findBy(locationSaveDto.userId());
-        return locationDao.save(locationMapper.toEntity(locationSaveDto, user));
+        User user = new User(locationSaveDto.userId(), "", "");
+        return repository.save(mapper.toEntity(locationSaveDto, user));
     }
 
-    public void delete(long id) {
+    public void delete(Long id) {
         if (id <= 0) {
             throw new IllegalArgumentException("location's id cannot be less than or equal to zero ");
         }
-        locationDao.delete(id);
+        repository.delete(id);
     }
 }
