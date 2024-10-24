@@ -4,16 +4,23 @@ package com.pustovalov.weatherapplication.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public record CreateUserFormData(
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class CreateUserFormData {
         @NotNull(message = "{user.registration.login}")
         @Size(min = 1, max = 20, message = "{user.registration.login.length}")
         @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "{user.registration.login.format}")
-        String login,
+        String login;
         @NotNull(message = "{user.registration.password}")
         @Size(min = 8, message = "{user.registration.password.length}")
         @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "{user.registration.password.format}")
-        String password
-) {
+        String password;
 
 }

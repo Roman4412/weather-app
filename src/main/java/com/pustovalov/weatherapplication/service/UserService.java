@@ -1,5 +1,6 @@
 package com.pustovalov.weatherapplication.service;
 
+import com.password4j.Password;
 import com.pustovalov.weatherapplication.dto.CreateUserFormData;
 import com.pustovalov.weatherapplication.dto.LoginUserFormData;
 import com.pustovalov.weatherapplication.entity.User;
@@ -10,6 +11,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -25,6 +28,11 @@ public class UserService {
         if (createUserFormData == null) {
             throw new IllegalArgumentException("createUserDto cannot be null");
         }
+
+        createUserFormData.setPassword(Password.hash(createUserFormData.getPassword())
+                                               .withBcrypt()
+                                               .getResult());
+
         return repository.save(mapper.toEntity(createUserFormData));
     }
 
@@ -49,10 +57,10 @@ public class UserService {
             throw new IllegalArgumentException("loginUserFormData cannot be null");
         }
 
-        return repository.findBy(loginUserFormData.login())
-                         .map(user -> user.getPassword()
-                                          .equals(loginUserFormData.password()))
-                         .orElse(false);
+        Optional<User> maybeUser = repository.findBy(loginUserFormData.login());
 
+        return maybeUser.map(user -> Password.check(loginUserFormData.password(), user.getPassword())
+                                             .withBcrypt())
+                        .orElse(false);
     }
 }
