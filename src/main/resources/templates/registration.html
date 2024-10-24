@@ -8,7 +8,7 @@
 </head>
 <body>
 <form class="reg-form" method="post" th:object="${createUserFormData}" data-th-action="@{/registration}">
-    <ul th:if="${#fields.hasErrors('login')}">
+    <ul th:if="${bindingResult.}">
         <li th:each="err : ${#fields.errors('login')}" th:text="${err}"></li>
     </ul>
     <input placeholder="Enter login" type="text" th:field="*{login}">

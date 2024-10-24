@@ -1,4 +1,4 @@
-package com.pustovalov.weatherapplication.dao;
+package com.pustovalov.weatherapplication.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
