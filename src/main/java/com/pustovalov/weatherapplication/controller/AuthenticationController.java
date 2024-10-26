@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 
 @Controller
@@ -33,13 +35,16 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public String verifyCredentials(@NotNull LoginUserFormData loginUserFormData, HttpServletResponse response, Model model) {
-        if (userService.isValidUserCredentials(loginUserFormData)) {
-            User user = userService.findBy(loginUserFormData.login());
-            Session session = sessionService.save(user);
+    public String verifyCredentials(@NotNull LoginUserFormData formData, HttpServletResponse response, Model model) {
+        Optional<User> optionalUser = userService.findBy(formData.login());
+
+        if (userService.isValidUserCredentials(formData, optionalUser)) {
+            Session session = sessionService.save(optionalUser.get());
+
             Cookie sessionId = new Cookie(SESSION_COOKIE_NAME, session.getId().toString());
             sessionId.setMaxAge(60 * 60 * 24 * 7);
             response.addCookie(sessionId);
+
             return "redirect:/weather";
         } else {
             model.addAttribute("errorMessage", "Invalid username or password");

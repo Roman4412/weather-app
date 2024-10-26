@@ -4,7 +4,6 @@ import com.password4j.Password;
 import com.pustovalov.weatherapplication.dto.CreateUserFormData;
 import com.pustovalov.weatherapplication.dto.LoginUserFormData;
 import com.pustovalov.weatherapplication.entity.User;
-import com.pustovalov.weatherapplication.exception.ObjectNotFoundException;
 import com.pustovalov.weatherapplication.repository.IUserRepository;
 import com.pustovalov.weatherapplication.service.mapper.UserMapper;
 import lombok.Getter;
@@ -44,23 +43,16 @@ public class UserService {
                          .orElseThrow(RuntimeException::new);
     }
 
-    public User findBy(String login) {
+    public Optional<User> findBy(String login) {
         if (login == null) {
             throw new IllegalArgumentException("id cannot be less than or equal to zero ");
         }
-        return repository.findBy(login)
-                         .orElseThrow(ObjectNotFoundException::new);
+        return repository.findBy(login);
     }
 
-    public boolean isValidUserCredentials(LoginUserFormData loginUserFormData) {
-        if (loginUserFormData == null) {
-            throw new IllegalArgumentException("loginUserFormData cannot be null");
-        }
-
-        Optional<User> maybeUser = repository.findBy(loginUserFormData.login());
-
-        return maybeUser.map(user -> Password.check(loginUserFormData.password(), user.getPassword())
-                                             .withBcrypt())
-                        .orElse(false);
+    public boolean isValidUserCredentials(LoginUserFormData formData, Optional<User> optionalUser) {
+        return optionalUser.map(user -> Password.check(formData.password(), user.getPassword())
+                                                .withBcrypt())
+                           .orElse(false);
     }
 }
