@@ -26,3 +26,7 @@ user-session:
     units: DAYS
   cookie:
     maxAge: 604_800
+
+logging:
+  level:
+    web: debug

@@ -8,6 +8,7 @@ import com.pustovalov.weatherapplication.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public String verifyCredentials(LoginUserFormData loginUserFormData, HttpServletResponse response, Model model) {
+    public String verifyCredentials(@NotNull LoginUserFormData loginUserFormData, HttpServletResponse response, Model model) {
         if (userService.isValidUserCredentials(loginUserFormData)) {
             User user = userService.findBy(loginUserFormData.login());
             Session session = sessionService.save(user);

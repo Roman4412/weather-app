@@ -26,9 +26,9 @@ public class SessionRepository extends AbstractSessionTransactionManager impleme
     public Optional<Session> findBy(UUID sessionId) {
         return executeInTransaction(s -> {
             String query = "SELECT s FROM Session s WHERE s.id = :id";
-            return Optional.of(s.createQuery(query, Session.class)
-                                .setParameter("id", sessionId)
-                                .uniqueResult());
+            return s.createQuery(query, Session.class)
+                    .setParameter("id", sessionId)
+                    .uniqueResultOptional();
         });
     }
 
@@ -37,8 +37,8 @@ public class SessionRepository extends AbstractSessionTransactionManager impleme
         sessionFactory.inTransaction(s -> {
             String query = "DELETE FROM Session WHERE id = :sessionId";
             s.createQuery(query)
-             .setParameter("sessionId", sessionId)
-             .executeUpdate();
+                .setParameter("sessionId", sessionId)
+                .executeUpdate();
         });
     }
 

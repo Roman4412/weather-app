@@ -2,18 +2,17 @@ package com.pustovalov.weatherapplication.controller;
 
 import com.pustovalov.weatherapplication.clients.OpenWeatherClient;
 import com.pustovalov.weatherapplication.dto.response.WeatherApiDataResponse;
-import com.pustovalov.weatherapplication.entity.Location;
 import com.pustovalov.weatherapplication.service.LocationService;
 import com.pustovalov.weatherapplication.service.SessionService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,8 +21,6 @@ import java.util.UUID;
 @RequestMapping("/weather")
 public class WeatherController {
 
-    public static final String SESSION_COOKIE_NAME = "SESSIONID";
-
     private final LocationService locationService;
 
     private final OpenWeatherClient openWeatherClient;
@@ -31,39 +28,24 @@ public class WeatherController {
     private final SessionService sessionService;
 
     @GetMapping
-    public String getPage(Model model, HttpServletRequest request) {
-        String sessionId = Arrays.stream(request.getCookies())
-                .filter(cookie -> SESSION_COOKIE_NAME.equals(cookie.getName()))
-                .findFirst()
-                .orElseThrow()
-                .getValue();
-
-        long userId = sessionService.findBy(UUID.fromString(sessionId))
-                .getUser()
-                .getId();
-
-        List<Location> locations = locationService.getAll(userId);
-        List<WeatherApiDataResponse> allWeather = locations.stream().map(loc -> {
-            WeatherApiDataResponse weather = openWeatherClient.getWeather(loc.getLatitude(), loc.getLongitude());
-            weather.setLocationId(loc.getId());
-            weather.setLocationName(loc.getName());
-            return weather;
-        }).toList();
+    public String getPage(Model model, @RequestAttribute @NotNull Long userId) {
+        List<WeatherApiDataResponse> allWeather =
+            locationService.getAll(userId).stream()
+                .map(l -> {
+                    WeatherApiDataResponse weather = openWeatherClient.getWeather(l.getLatitude(), l.getLongitude());
+                    weather.setLocationId(l.getId());
+                    weather.setLocationName(l.getName());
+                    return weather;
+                })
+                .toList();
 
         model.addAttribute("weatherData", allWeather);
         return "weather";
     }
 
     @PostMapping
-    public String logout(HttpServletRequest request) {
-        String sessionId = Arrays.stream(request.getCookies())
-                .filter(cookie -> SESSION_COOKIE_NAME.equals(cookie.getName()))
-                .findFirst()
-                .orElseThrow()
-                .getValue();
-
+    public String logout(@RequestAttribute @NotNull String sessionId) {
         sessionService.delete(UUID.fromString(sessionId));
-
         return "redirect:/login";
     }
 
