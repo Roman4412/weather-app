@@ -33,10 +33,10 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        Optional<Session> optionalSession = findValidSession(req.getCookies());
+        Optional<Session> optionalSession = findSession(req.getCookies());
 
         if ("/weather".equals(req.getRequestURI()) || "/location".equals(req.getRequestURI())) {
-            if (optionalSession.isPresent()) {
+            if (optionalSession.isPresent() && sessionService.isValid(optionalSession.get())) {
                 String userId = optionalSession.get().getUser().getId().toString();
                 req.setAttribute("userId", userId);
                 req.setAttribute("sessionId", optionalSession.get().getId());
@@ -45,7 +45,7 @@ public class AuthorizationFilter implements Filter {
                 resp.sendRedirect("/login");
             }
         } else if ("/login".equals(req.getRequestURI()) || "/registration".equals(req.getRequestURI())) {
-            if (optionalSession.isPresent()) {
+            if (optionalSession.isPresent() && sessionService.isValid(optionalSession.get())) {
                 String userId = optionalSession.get().getUser().getId().toString();
                 req.setAttribute("userId", userId);
                 request.getRequestDispatcher("/weather").forward(request, response);
@@ -57,7 +57,7 @@ public class AuthorizationFilter implements Filter {
         }
     }
 
-    private Optional<Session> findValidSession(Cookie[] cookies) {
+    private Optional<Session> findSession(Cookie[] cookies) {
         if (cookies == null) {
             return Optional.empty();
         }
@@ -65,13 +65,11 @@ public class AuthorizationFilter implements Filter {
         Optional<Cookie> optionalSession = Arrays.stream(cookies)
                                                  .filter(cookie -> SESSION_COOKIE_NAME.equals(cookie.getName()))
                                                  .findFirst();
-
         if (optionalSession.isEmpty()) {
             return Optional.empty();
         }
 
         String sessionId = optionalSession.get().getValue();
-
         return sessionService.findBy(UUID.fromString(sessionId));
     }
 }

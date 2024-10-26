@@ -42,4 +42,9 @@ public class SessionService {
     public void delete(UUID sessionId) {
         repository.delete(sessionId);
     }
+
+    public boolean isValid(Session session) {
+        return session.getExpiresAt().isAfter(LocalDateTime.now());
+    }
+
 }
