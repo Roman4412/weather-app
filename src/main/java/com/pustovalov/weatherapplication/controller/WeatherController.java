@@ -4,14 +4,12 @@ import com.pustovalov.weatherapplication.clients.OpenWeatherClient;
 import com.pustovalov.weatherapplication.dto.response.WeatherApiDataResponse;
 import com.pustovalov.weatherapplication.service.LocationService;
 import com.pustovalov.weatherapplication.service.SessionService;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -49,4 +47,9 @@ public class WeatherController {
         return "redirect:/login";
     }
 
+    @ExceptionHandler(FeignException.class)
+    public String handleFeignException(Model model) {
+        model.addAttribute("errorMessage", "Data could not be received from an external service");
+        return "weather";
+    }
 }

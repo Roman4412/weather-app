@@ -3,7 +3,7 @@ package com.pustovalov.weatherapplication.controller;
 import com.pustovalov.weatherapplication.clients.OpenWeatherClient;
 import com.pustovalov.weatherapplication.dto.LocationSaveDto;
 import com.pustovalov.weatherapplication.service.LocationService;
-import jakarta.validation.constraints.NotBlank;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
@@ -22,9 +22,11 @@ public class LocationsController {
     private final OpenWeatherClient openWeatherClient;
 
     @GetMapping
-    public String findLocations(@RequestParam @NotBlank String cityName, Model model) {
+    public String findLocations(@RequestParam @NotNull String cityName, Model model) {
+        if (cityName.isEmpty()) {
+            cityName = " ";
+        }
         model.addAttribute("locations", openWeatherClient.getLocations(cityName));
-
         return "locations";
     }
 
@@ -32,14 +34,18 @@ public class LocationsController {
     public String saveLocation(@NotNull LocationSaveDto locationSaveDto, @RequestAttribute @NotNull Long userId) {
         locationSaveDto.setUserId(userId);
         locationService.save(locationSaveDto);
-
         return "redirect:/weather";
     }
 
     @DeleteMapping
     public String deleteLocation(@RequestParam @NotNull Long id) {
         locationService.delete(id);
-
         return "weather";
     }
+
+    @ExceptionHandler(FeignException.class)
+    public String handleFeignException() {
+        return "/error/503";
+    }
+
 }

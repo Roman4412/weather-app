@@ -12,7 +12,8 @@
     </form>
 </div>
 <div class="locations">
-    <div class="location" th:each="weather:${weatherData}">
+    <div th:if="${errorMessage}"><p th:text="${errorMessage}"></p></div>
+    <div th:if="!${errorMessage}" class="location" th:each="weather:${weatherData}">
         <p th:text="${weather.locationName}"></p>
         <p th:text="'Temperature: ' + ${weather.main.temp}"></p>
         <p th:text="'Humidity: ' + ${weather.main.humidity}"></p>
