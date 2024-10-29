@@ -2,6 +2,7 @@ package com.pustovalov.weatherapplication.controller;
 
 import com.pustovalov.weatherapplication.clients.OpenWeatherClient;
 import com.pustovalov.weatherapplication.dto.LocationSaveDto;
+import com.pustovalov.weatherapplication.exception.UnauthorizedLocationAccessException;
 import com.pustovalov.weatherapplication.service.LocationService;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +39,9 @@ public class LocationsController {
     }
 
     @DeleteMapping
-    public String deleteLocation(@RequestParam @NotNull Long id) {
-        locationService.delete(id);
-        return "weather";
+    public String deleteLocation(@RequestParam @NotNull Long id, @RequestAttribute @NotNull Long userId) {
+        locationService.delete(id, userId);
+        return "redirect:/weather";
     }
 
     @ExceptionHandler(FeignException.class)
@@ -48,4 +49,10 @@ public class LocationsController {
         return "/error/503";
     }
 
+    @ExceptionHandler(UnauthorizedLocationAccessException.class)
+    public String handleUnauthorizedLocationAccessException(Model model) {
+        model.addAttribute("message",
+                "You do not have the rights to delete this location, as it belongs to another user.");
+        return "/error/403";
+    }
 }

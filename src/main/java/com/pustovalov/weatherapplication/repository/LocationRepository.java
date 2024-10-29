@@ -7,6 +7,7 @@ import org.postgresql.util.PSQLException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class LocationRepository extends AbstractSessionTransactionManager implements ILocationRepository {
@@ -56,6 +57,16 @@ public class LocationRepository extends AbstractSessionTransactionManager implem
             s.createQuery(query)
              .setParameter("id", id)
              .executeUpdate();
+        });
+    }
+
+    @Override
+    public Optional<Location> findBy(Long id) {
+        return executeInTransaction(s -> {
+            String query = "SELECT l FROM  Location l WHERE l.id = :id";
+            return s.createQuery(query, Location.class)
+                    .setParameter("id", id)
+                    .uniqueResultOptional();
         });
     }
 }
