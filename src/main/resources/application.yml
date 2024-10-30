@@ -20,12 +20,10 @@ open-weather-api:
   weather-path: /data/2.5/weather
   units: metric
 
-user-session:
-  long:
-    amount: 7
-    units: DAYS
-  cookie:
-    maxAge: 604_800
+session:
+  maxAge: 604_800
+cookie:
+  maxAge: 604_800
 
 logging:
   level:

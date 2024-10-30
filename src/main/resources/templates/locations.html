@@ -6,13 +6,13 @@
 </head>
 <body>
 <div class="search-form">
-    <form data-th-action="@{/location}" method="get">
+    <form data-th-action="@{/locations}" method="get">
         <input type="search" name="cityName" th:value="${param.city}" placeholder="Enter the city name">
         <button type="submit">find</button>
     </form>
 </div>
 <div class="loc-save-form" th:each="location:${locations}">
-    <form data-th-action="@{/location}" method="post">
+    <form data-th-action="@{/locations}" method="post">
         <p th:text="*{location.name}"></p>
         <p th:text="*{location.country}"></p>
         <p th:text="*{location.state}"></p>

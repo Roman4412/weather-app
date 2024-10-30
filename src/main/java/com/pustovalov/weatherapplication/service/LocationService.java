@@ -1,6 +1,8 @@
 package com.pustovalov.weatherapplication.service;
 
+import com.pustovalov.weatherapplication.clients.OpenWeatherClient;
 import com.pustovalov.weatherapplication.dto.LocationSaveDto;
+import com.pustovalov.weatherapplication.dto.response.WeatherApiDataResponse;
 import com.pustovalov.weatherapplication.entity.Location;
 import com.pustovalov.weatherapplication.entity.User;
 import com.pustovalov.weatherapplication.exception.ObjectNotFoundException;
@@ -20,6 +22,8 @@ public class LocationService {
     private final ILocationRepository repository;
 
     private final LocationMapper mapper;
+
+    private final OpenWeatherClient openWeatherClient;
 
     public List<Location> getAll(Long userId) {
         if (userId <= 0) {
@@ -47,5 +51,14 @@ public class LocationService {
         }
 
         repository.delete(id);
+    }
+
+    public List<WeatherApiDataResponse> getForecast(Long userId) {
+        return getAll(userId).stream().map(l -> {
+                    WeatherApiDataResponse weather = openWeatherClient.getWeather(l.getLatitude(), l.getLongitude());
+                    weather.setLocationId(l.getId());
+                    weather.setLocationName(l.getName());
+                    return weather; })
+                .toList();
     }
 }

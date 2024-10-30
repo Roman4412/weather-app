@@ -6,13 +6,13 @@
 </head>
 <body>
 <div class="search-form">
-    <form data-th-action="@{/location}" method="get">
+    <form data-th-action="@{/locations}" method="get">
         <input type="search" name="cityName" placeholder="Enter the city name">
         <button type="submit">find</button>
     </form>
 </div>
 <div class="locations">
-    <form data-th-action="@{/location}" method="post">
+    <form data-th-action="@{/locations}" method="post">
         <div th:if="${errorMessage}"><p th:text="${errorMessage}"></p></div>
         <div th:if="!${errorMessage}" class="location" th:each="weather:${weatherData}">
             <p th:text="${weather.locationName}"></p>
@@ -27,7 +27,7 @@
     </form>
 </div>
 <div>
-    <form data-th-action="@{/weather}" method="post">
+    <form data-th-action="@{/users/logout}" method="post">
         <button type="submit">Logout</button>
     </form>
 </div>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/login.css">
 </head>
 <body>
-<form class="login-form" method="post" data-th-action="@{/login}">
+<form class="login-form" method="post" data-th-action="@{/users/login}">
     <div th:if="${errorMessage}">
         <p th:text="${errorMessage}"></p>
     </div>
@@ -15,6 +15,6 @@
     <input placeholder="Enter password" type="password" name="password">
     <button type="submit">Login</button>
 </form>
-<a th:href="@{/registration}">registration</a>
+<a th:href="@{/users/registration}">registration</a>
 </body>
 </html>

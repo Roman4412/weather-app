@@ -9,21 +9,19 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/location")
-@Validated
-public class LocationsController {
+@RequestMapping("/locations")
+public class LocationController {
 
     private final LocationService locationService;
 
     private final OpenWeatherClient openWeatherClient;
 
     @GetMapping
-    public String findLocations(@RequestParam @NotNull String cityName, Model model) {
+    public String findLocation(@RequestParam @NotNull String cityName, Model model) {
         if (cityName.isEmpty()) {
             cityName = " ";
         }
@@ -35,13 +33,19 @@ public class LocationsController {
     public String saveLocation(@NotNull LocationSaveDto locationSaveDto, @RequestAttribute @NotNull Long userId) {
         locationSaveDto.setUserId(userId);
         locationService.save(locationSaveDto);
-        return "redirect:/weather";
+        return "redirect:/locations/weather";
     }
 
     @DeleteMapping
     public String deleteLocation(@RequestParam @NotNull Long id, @RequestAttribute @NotNull Long userId) {
         locationService.delete(id, userId);
-        return "redirect:/weather";
+        return "redirect:/locations/weather";
+    }
+
+    @GetMapping("/weather")
+    public String getForecast(Model model, @RequestAttribute @NotNull Long userId) {
+        model.addAttribute("weatherData", locationService.getForecast(userId));
+        return "main";
     }
 
     @ExceptionHandler(FeignException.class)
