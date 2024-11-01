@@ -3,16 +3,16 @@ package com.pustovalov.weatherapplication.repository;
 import com.pustovalov.weatherapplication.entity.Location;
 import com.pustovalov.weatherapplication.exception.ObjectAlreadyExistException;
 import org.hibernate.SessionFactory;
-import org.postgresql.util.PSQLException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.hibernate.exception.ConstraintViolationException.ConstraintKind;
+
 @Repository
 public class LocationRepository extends AbstractSessionTransactionManager implements ILocationRepository {
-
-    private static final String UNIQUE_VIOLATION_CODE = "23505";
 
     public LocationRepository(SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -24,13 +24,13 @@ public class LocationRepository extends AbstractSessionTransactionManager implem
             try {
                 s.persist(location);
             } catch (Exception e) {
-                Throwable cause = e.getCause();
-                if (cause instanceof PSQLException psqlException) {
-                    if (UNIQUE_VIOLATION_CODE.equals(psqlException.getSQLState())) {
+                if (e instanceof ConstraintViolationException) {
+                    ConstraintKind kind = ((ConstraintViolationException) e).getKind();
+
+                    if (kind.equals(ConstraintKind.UNIQUE)) {
                         throw new ObjectAlreadyExistException(
                                 "The location %s already exists for %s".formatted(location.getName(),
-                                                                                  location.getUser().getLogin()),
-                                cause);
+                                                                                  location.getUser().getLogin()));
                     }
                 } else {
                     throw e;
