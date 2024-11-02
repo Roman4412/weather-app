@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/changeset/09.10.24-create-table-locations.yml
   - include:
       file: db/changelog/changeset/09.10.24-create-table-sessions.yml
+  - include:
+      file: db/changelog/changeset/22.10.24-change-session-id-column-type.yml

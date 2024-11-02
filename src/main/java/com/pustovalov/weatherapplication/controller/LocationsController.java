@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("location")
+@RequestMapping("/location")
 @Validated
 public class LocationsController {
 
@@ -24,18 +24,22 @@ public class LocationsController {
     @GetMapping
     public String findLocations(@RequestParam @NotBlank String cityName, Model model) {
         model.addAttribute("locations", openWeatherClient.getLocations(cityName));
+
         return "locations";
     }
 
     @PostMapping
-    public String saveLocation(@NotNull LocationSaveDto locationSaveDto) {
+    public String saveLocation(@NotNull LocationSaveDto locationSaveDto, @RequestAttribute @NotNull Long userId) {
+        locationSaveDto.setUserId(userId);
         locationService.save(locationSaveDto);
+
         return "redirect:/weather";
     }
 
     @DeleteMapping
     public String deleteLocation(@RequestParam @NotNull Long id) {
         locationService.delete(id);
+
         return "weather";
     }
 }

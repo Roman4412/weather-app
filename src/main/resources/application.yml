@@ -1,24 +1,8 @@
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:${DB_DRIVER}://${DB_HOST}:${PORT}/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
   mvc:
     view:
       prefix: /templates/
       suffix: .html
-  jpa:
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-      show_sql: true
-  liquibase:
-    enabled: true
-    changelog: db/changelog/db.changelog-master.yml
   cloud:
     openfeign:
       client:
@@ -31,8 +15,18 @@ spring:
             default-query-parameters:
               limit: 15
               appid: ${OPEN_WEATHER_KEY}
-
 open-weather-api:
   geo-path: /geo/1.0/direct
   weather-path: /data/2.5/weather
   units: metric
+
+user-session:
+  long:
+    amount: 7
+    units: DAYS
+  cookie:
+    maxAge: 604_800
+
+logging:
+  level:
+    web: debug

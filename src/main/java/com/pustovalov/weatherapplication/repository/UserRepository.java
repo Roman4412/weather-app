@@ -41,4 +41,12 @@ public class UserRepository extends AbstractSessionTransactionManager implements
         return Optional.ofNullable(executeInTransaction(s -> s.get(User.class, id)));
     }
 
+    @Override
+    public Optional<User> findBy(String login) {
+        return Optional.ofNullable(executeInTransaction(session -> {
+            String query = "SELECT u FROM User u WHERE u.login=:login";
+            return session.createQuery(query, User.class).setParameter("login", login).uniqueResult();
+        }));
+    }
+
 }

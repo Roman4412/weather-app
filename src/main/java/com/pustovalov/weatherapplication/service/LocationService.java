@@ -22,14 +22,14 @@ public class LocationService {
         if (userId <= 0) {
             throw new IllegalArgumentException("userId cannot be less than or equal to zero ");
         }
-        return repository.getAll(userId);
+        return repository.findAll(userId);
     }
 
     public Location save(LocationSaveDto locationSaveDto) {
         if (locationSaveDto == null) {
             throw new IllegalArgumentException("location cannot be null");
         }
-        User user = new User(locationSaveDto.userId(), "", "");
+        User user = new User(locationSaveDto.getUserId(), "", "");
         return repository.save(mapper.toEntity(locationSaveDto, user));
     }
 
