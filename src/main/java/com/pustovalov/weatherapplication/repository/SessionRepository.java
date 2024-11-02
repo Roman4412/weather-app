@@ -4,6 +4,7 @@ import com.pustovalov.weatherapplication.entity.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,6 +40,16 @@ public class SessionRepository extends AbstractSessionTransactionManager impleme
             s.createQuery(query)
                 .setParameter("sessionId", sessionId)
                 .executeUpdate();
+        });
+    }
+
+    @Override
+    public int deleteAllByExpiresAtBefore(LocalDateTime expiresAt) {
+        return executeInTransaction(s -> {
+            String query = "DELETE FROM Session s WHERE s.expiresAt <= :expiresAt";
+            return s.createQuery(query)
+                    .setParameter("expiresAt", expiresAt)
+                    .executeUpdate();
         });
     }
 

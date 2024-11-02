@@ -22,6 +22,8 @@ open-weather-api:
 
 session:
   maxAge: 604_800
+  cleanup:
+    cron: 0 0 3 * * SUN
 cookie:
   maxAge: 604_800
 
