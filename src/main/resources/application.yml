@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: test
   mvc:
     view:
       prefix: /templates/
@@ -63,6 +63,8 @@ spring:
 
 session:
   maxAge: 604_800
+  cleanup:
+    cron: 0 0 3 * * SUN
 cookie:
   maxAge: 604_800
 
