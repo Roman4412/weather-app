@@ -2,6 +2,9 @@ package com.pustovalov.weatherapplication.exception;
 
 public class ObjectNotFoundException extends RuntimeException {
 
+    public ObjectNotFoundException() {
+    }
+
     public ObjectNotFoundException(String message) {
         super(message);
     }
@@ -19,8 +22,5 @@ public class ObjectNotFoundException extends RuntimeException {
                                    boolean enableSuppression,
                                    boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
-    }
-
-    public ObjectNotFoundException() {
     }
 }

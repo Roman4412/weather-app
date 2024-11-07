@@ -50,9 +50,8 @@ public class UserService {
         return repository.findBy(login);
     }
 
-    public boolean isValidUserCredentials(LoginUserFormData formData, Optional<User> optionalUser) {
-        return optionalUser.map(user -> Password.check(formData.password(), user.getPassword())
-                                                .withBcrypt())
-                           .orElse(false);
+    public boolean isValidUserCredentials(LoginUserFormData formData, User user) {
+        return Password.check(formData.password(), user.getPassword())
+                       .withBcrypt();
     }
 }

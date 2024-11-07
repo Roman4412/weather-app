@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/registration.css">
 </head>
 <body>
-<form class="reg-form" method="post" th:object="${createUserFormData}" data-th-action="@{/registration}">
+<form class="reg-form" method="post" th:object="${createUserFormData}" data-th-action="@{/users/registration}">
     <ul th:if="${#fields.hasErrors('login')}">
         <li th:each="err : ${#fields.errors('login')}" th:text="${err}"></li>
     </ul>
@@ -16,7 +16,7 @@
     <ul th:if="${#fields.hasErrors('password')}">
         <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
     </ul>
-    <p th:if="${error}" th:text="${error.message}"></p>
+    <p th:if="${error}" th:text="${error}"></p>
     <input placeholder="Enter password" type="password" th:field="*{password}">
     <button type="submit">register</button>
 </form>

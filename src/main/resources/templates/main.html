@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather</title>
+</head>
+<body>
+<div class="search-form">
+    <form data-th-action="@{/locations}" method="get">
+        <input type="search" name="cityName" placeholder="Enter the city name">
+        <button type="submit">find</button>
+    </form>
+</div>
+<div class="locations">
+    <form data-th-action="@{/locations}" method="post">
+        <div th:if="${errorMessage}"><p th:text="${errorMessage}"></p></div>
+        <div th:if="!${errorMessage}" class="location" th:each="weather:${weatherData}">
+            <p th:text="${weather.locationName}"></p>
+            <p th:text="'Temperature: ' + ${weather.main.temp}"></p>
+            <p th:text="'Humidity: ' + ${weather.main.humidity}"></p>
+            <p th:text="'Pressure: ' + ${weather.main.pressure}"></p>
+            <p th:text="'Wind speed: ' + ${weather.wind.speed}"></p>
+            <input type="hidden" name="_method" value="delete">
+            <input type="hidden" name="id" th:value="${weather.locationId}">
+            <button type="submit">delete</button>
+        </div>
+    </form>
+</div>
+<div>
+    <form data-th-action="@{/users/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</div>
+</body>
+</html>
+
+

@@ -5,6 +5,7 @@ import com.pustovalov.weatherapplication.entity.User;
 import com.pustovalov.weatherapplication.repository.ISessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -17,20 +18,15 @@ import java.util.UUID;
 @Service
 public class SessionService {
 
-    //TODO удаление устаревших сессий из бд по расписанию
     private final ISessionRepository repository;
 
-    @Value("${user-session.long.amount}")
-    Long amount;
-
-    @Value("${user-session.long.units}")
-    String units;
+    @Value("${session.maxAge}")
+    private Integer sessionMaxAge;
 
     public Session save(User user) {
         Session session = new Session();
         session.setUser(user);
-        Duration duration = Duration.of(amount, ChronoUnit.valueOf(units));
-        session.setExpiresAt(LocalDateTime.now().plus(duration));
+        session.setExpiresAt(getExpiryTime(sessionMaxAge));
 
         return repository.save(session);
     }
@@ -47,4 +43,13 @@ public class SessionService {
         return session.getExpiresAt().isAfter(LocalDateTime.now());
     }
 
+    private LocalDateTime getExpiryTime(Integer timeoutInSeconds) {
+        Duration maxAge = Duration.of(timeoutInSeconds, ChronoUnit.SECONDS);
+        return LocalDateTime.now().plus(maxAge);
+    }
+
+    @Scheduled(cron = "${session.cleanup.cron}")
+    private void deleteExpiredSessions() {
+       repository.deleteAllByExpiresAtBefore(LocalDateTime.now());
+    }
 }

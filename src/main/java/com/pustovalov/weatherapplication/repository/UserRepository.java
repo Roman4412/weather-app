@@ -3,14 +3,12 @@ package com.pustovalov.weatherapplication.repository;
 import com.pustovalov.weatherapplication.entity.User;
 import com.pustovalov.weatherapplication.exception.ObjectAlreadyExistException;
 import org.hibernate.SessionFactory;
-import org.postgresql.util.PSQLException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 @Repository
 public class UserRepository extends AbstractSessionTransactionManager implements IUserRepository {
-
-    private static final String UNIQUE_VIOLATION_CODE = "23505";
 
     public UserRepository(SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -22,11 +20,10 @@ public class UserRepository extends AbstractSessionTransactionManager implements
             try {
                 s.persist(user);
             } catch (Exception e) {
-                Throwable cause = e.getCause();
-                if (cause instanceof PSQLException psqlException) {
-                    if (UNIQUE_VIOLATION_CODE.equals(psqlException.getSQLState())) {
-                        throw new ObjectAlreadyExistException(
-                                String.format("The user with the login %s already exists", user.getLogin()), cause);
+                if (e instanceof ConstraintViolationException) {
+                    ConstraintViolationException.ConstraintKind kind = ((ConstraintViolationException) e).getKind();
+                    if (kind.equals(ConstraintViolationException.ConstraintKind.UNIQUE)) {
+                        throw new ObjectAlreadyExistException("The login %s already exists".formatted(user.getLogin()));
                     }
                 } else {
                     throw e;

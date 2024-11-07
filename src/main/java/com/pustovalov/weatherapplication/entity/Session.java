@@ -11,16 +11,20 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-
 @Entity
 @Table(name = "sessions")
 public class Session {
+
+    public Session(User user, LocalDateTime expiresAt) {
+        this.user = user;
+        this.expiresAt = expiresAt;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
